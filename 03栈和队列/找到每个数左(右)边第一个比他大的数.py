@@ -1,8 +1,41 @@
 '''
 
-利用单调栈，从左至右依次压入数据的索引（若直接压数，则还需要一个数组保存栈中元素所对应的数组位置，
-如果当前元素小于等于栈顶的索引所对应的数组的值，入栈当前索引，否则将栈顶索引出栈，并在栈顶索引所
-对应的res数组中记录下当前的值。到最后再检查栈中剩余元素，代表剩余元素右边没有比它大的值，在res对应
-位置赋值为-1
+利用单调栈，从左至右依次压入数据，当数据出栈的时候，它的前面一个元素就是它左边第一个大于它的数
 
 '''
+def popStacksetMap(stack,lBigmap):
+	t = stack.pop()
+	if not stack:
+		lBigmap[t] = None
+	else:
+		lBigmap[t] = stack[-1]
+	return lBigmap,stack
+
+
+def getleftbigger(nums):
+	lBigmap = {}
+	stack = []
+	for i in nums:
+		print(i, stack)
+		while stack and stack[-1] < i:
+			lBigmap,stack = popStacksetMap(stack, lBigmap)
+		stack.append(i)
+	while stack:
+		lBigmap,stack = popStacksetMap(stack, lBigmap)
+
+	return lBigmap 
+
+def getrightbigger(nums):
+	rBigmap = {}
+	stack = []
+	for i in nums[::-1]:
+		while stack and stack[-1]<i:
+			rBigmap, stack = popStacksetMap(stack, rBigmap)
+		stack.append(i)
+	while stack:
+		rBigmap, stack = popStacksetMap(stack, rBigmap)
+	return rBigmap
+
+nums = [6,2,3,4,1,7,9]
+print(getleftbigger(nums))
+print(getrightbigger(nums))
